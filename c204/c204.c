@@ -50,17 +50,16 @@ void untilLeftPar ( tStack* s, char* postExpr, unsigned* postLen ) {
     char top;
     stackTop(s, &top);
 
-    while (top != '('){
+    while ((!(stackEmpty(s)))){
         stackTop(s, &top);
         stackPop(s);
+        if (top == '('){
+            return;
+        }
         postExpr[*postLen] = top;
         *postLen += 1;
     }
 
-    stackTop(s, &top);
-    if (top == '('){
-        stackPop(s);
-    }
 }
 
 /*
@@ -82,8 +81,6 @@ void doOperation ( tStack* s, char c, char* postExpr, unsigned* postLen ) {
     }
 
     if (c == '*' || c == '/' || c == '+' || c == '-'){
-        //TODO
-        //DOROBIT TO AK SA MA VYHODIT JEDEN UZ ZO STACKU DO POLA napr. mame - a pride *
         if ((c == '*' || c == '/') && (top == '+' || top == '-')){
             postExpr[*postLen] = top;
             *postLen += 1;
@@ -185,8 +182,8 @@ char* infix2postfix (const char* infExpr) {
         }
 
         else if (infExpr[i] == ')') {
-            //untilLeftPar(&s, postExpr, &postLen);
-        } //TODO SEGFAULTUJE
+            untilLeftPar(&s, postExpr, &postLen);
+        }
 
         else{
             doOperation(&s, infExpr[i], postExpr, &postLen);
@@ -195,25 +192,14 @@ char* infix2postfix (const char* infExpr) {
         i++;
     }
 
-    char top;
     if (infExpr[i] == '='){
-        while(!(stackEmpty(&s))){
-            stackTop(&s, &top);
-            if (top == '(' || top == ')'){
-                stackPop(&s);
-            }else {
-                postExpr[postLen] = top;
-                stackPop(&s);
-                postLen += 1;
-            }
-        }
+        untilLeftPar(&s, postExpr, &postLen);
         postExpr[postLen] = '=';
         postExpr[postLen+1] = '\0';
     }
 
 
     return postExpr;
-
 }
 
 /* Konec c204.c */
