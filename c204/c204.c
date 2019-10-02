@@ -91,22 +91,25 @@ void doOperation ( tStack* s, char c, char* postExpr, unsigned* postLen ) {
             stackPush(s, c);
         }
 
-        else if (((top == '+' || top == '-') && (c == '+' || c == '-'))){
-            postExpr[*postLen] = c;
+        else if ((top == '+' || top == '-') && (c == '+' || c == '-')){
+            postExpr[*postLen] = top;
             *postLen += 1;
-            //stackPop(s);
+            stackPop(s);
+            stackPush(s, c);
         }
 
-        else if (((c == '+' || c == '-') && (top == '*' || top == '/'))){
-            postExpr[*postLen] = c;
+        else if ((c == '+' || c == '-') && (top == '*' || top == '/')){
+            postExpr[*postLen] = top;
             *postLen += 1;
-            //stackPop(s);
+            stackPop(s);
+            stackPush(s, c);
         }
 
-        else if (((top == '*' || top == '/') && (c == '*' || c == '/'))){
-            postExpr[*postLen] = c;
+        else if ((top == '*' || top == '/') && (c == '*' || c == '/')){
+            postExpr[*postLen] = top;
             *postLen += 1;
-            //stackPop(s);
+            stackPop(s);
+            stackPush(s, c);
         }
 
         else {
