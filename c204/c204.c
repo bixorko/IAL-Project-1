@@ -48,7 +48,6 @@ int solved;
 */
 void untilLeftPar ( tStack* s, char* postExpr, unsigned* postLen ) {
     char top;
-    stackTop(s, &top);
 
     while ((!(stackEmpty(s)))){
         stackTop(s, &top);
